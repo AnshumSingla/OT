@@ -92,7 +92,7 @@ k = convhull(feas_pts(:,1), feas_pts(:,2))
 fill(feas_pts(k,1), feas_pts(k,2), 'y')
 
 %phase 7 - calculate optimal solution and value
-z = feas_pts * c'
+z = feas_pts * C'
 [opt_val index] = max(z)   %there can be min depending on the question
 x1 = feas_pts(index,1)
 x2 = feas_pts(index,2)
