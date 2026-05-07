@@ -1,0 +1,29 @@
+clc
+clear all;
+
+%% Initalization
+syms x1 x2;
+f1 = x1 - x2 + 2*x1^2 + 2*x1*x2 + x2^2;
+fx = inline(f1);
+fobj = @(X) fx(X(1), X(2));
+grad = gradient(f1);
+Gx = inline(grad);
+Gobj = @(X) Gx(X(1), X(2));
+H1 = hessian(f1);
+Hx = inline(H1);
+X0 = [0, 0];
+maxiter = 100;
+tol = 10^-3;
+
+%% Steepest Descent Iteration
+iter = 0;
+while norm(Gobj(X0)) > tol && iter < maxiter
+    S = -Gobj(X0);
+    H = Hx(X0);
+    l = (S' * S) / (S' * H * S);
+    Xnew = X0 + l*S';
+    X0 = Xnew;
+    iter = iter + 1;
+end
+fprintf('The optimal sol is (%f, %f)', X0(1), X0(2));
+fprintf('\nThe optimal value is %f', fobj(X0));
