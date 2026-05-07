@@ -1,0 +1,50 @@
+%transportation q code only balanced and manual unbalanced can come (most
+%probalably unbalanced)
+
+c=[4,5,2;
+    4,1,3;
+    3,6,2;
+    2,3,7]
+s=[30,40,20,60]
+d=[40,50,60]
+m=size(c,1)
+n=size(c,2)
+
+if sum(s)==sum(d)
+    fprintf('the given trasportation is balanced')
+    z=0
+    x=zeros(m,n)
+    initialc=c
+    for i=1:m
+        for j=1:n
+            cpq=min(c(:))
+            if cpq==inf
+                break
+            end
+            [p1 q1]=find(cpq==c)
+            xpq=min(s(p1),d(q1))
+            [value ind]=max(xpq)
+            p=p1(ind)
+            q=q1(ind)
+            x(p,q)=min(s(p),d(q)) %or value
+            if min(s(p),d(q))==s(p)
+                d(q)=d(q)-s(p)
+                s(p)=s(p)-x(p,q)
+                c(p,:)=Inf
+            else
+                s(p)=s(p)-d(q)
+                d(q)=d(q)-x(p,q)
+                c(:,q)=Inf
+            end
+        end
+    end
+    for i=1:m
+        for j=1:n
+            z=z+initialc(i,j)*x(i,j)
+        end
+    end
+    fprintf('the total transportation cost is %f',z)
+    x
+else
+    fprintf('Transportation problem is unbalanced')
+end
